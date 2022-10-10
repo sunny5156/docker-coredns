@@ -30,6 +30,8 @@ func Router() {
 	Router.GET("/v1/domains/:domain_uuid/hosts", func(c *gin.Context) { hcntr.List(c) })
 	Router.PATCH("/v1/domains/:domain_uuid/hosts/:host_uuid", func(c *gin.Context) { hcntr.Update(c) })
 	Router.GET("/v1/domains/:domain_uuid/hosts/:host_uuid", func(c *gin.Context) { hcntr.Get(c) })
+	Router.GET("/v1/domains/:domain_uuid/hostname/:host_name", func(c *gin.Context) { hcntr.GetByHostName(c) })
+	Router.PATCH("/v1/domains/:domain_uuid/hostname/:host_name", func(c *gin.Context) { hcntr.UpdateByHostName(c) })
 	Router.DELETE("/v1/domains/:domain_uuid/hosts/:host_uuid", func(c *gin.Context) { hcntr.Delete(c) })
 
 	url := ginSwagger.URL("http://" + Server + ":" + Port + "/swagger/doc.json")

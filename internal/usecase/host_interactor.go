@@ -25,9 +25,6 @@ func (i *HostInteractor) Add(newHost *model.Host, domainUuid model.Uuid, request
 		if h.Name == newHost.Name {
 			return nil, NewHostDuplicatedError("hostname", newHost.Name)
 		}
-		if h.Address == newHost.Address {
-			return nil, NewHostDuplicatedError("address", newHost.Address)
-		}
 	}
 
 	hosts := append(gotDomain.Hosts, newHost)
@@ -59,6 +56,25 @@ func (i *HostInteractor) Get(hostUuid, domainUuid model.Uuid, requestTenantUuid 
 	return nil, model.NewHostNotFoundError()
 }
 
+func (i *HostInteractor) GetByHostName(hostName string , domainUuid model.Uuid, requestTenantUuid model.Uuid) (*model.Host, error) {
+	i.fsRepository.Lock()
+	defer i.fsRepository.UnLock()
+
+	domain, err := i.fsRepository.GetDomainByUuid(domainUuid, requestTenantUuid)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, h := range domain.Hosts {
+
+		if h.Name == hostName {
+			return h, nil
+		}
+	}
+
+	return nil, model.NewHostNotFoundError()
+}
+
 func (i *HostInteractor) GetDomain(domainUuid model.Uuid, requestTenantUuid model.Uuid) (*model.Domain, error) {
 	i.fsRepository.Lock()
 	defer i.fsRepository.UnLock()
@@ -83,12 +99,7 @@ func (i *HostInteractor) Update(newHost *model.Host, domainUuid model.Uuid, requ
 	var newHosts []*model.Host
 	found := false
 	for _, h := range domain.Hosts {
-		if h.Name == newHost.Name {
-			return NewHostDuplicatedError("hostname", newHost.Name)
-		}
-		if h.Address == newHost.Address {
-			return NewHostDuplicatedError("address", newHost.Address)
-		}
+
 
 		if h.Uuid == newHost.Uuid {
 			newHosts = append(newHosts, newHost)

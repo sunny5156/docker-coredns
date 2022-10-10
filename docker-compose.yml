@@ -2,7 +2,7 @@ version: "3"
 
 services:
   coredns-container:
-    image: coredns/coredns:1.8.0
+    image: coredns/coredns:1.8.6
     container_name: coredns-container
     hostname: coredns-container
     ports:
@@ -13,6 +13,7 @@ services:
 
   coredns-api:
     image: coredns-api:0.1
+    # build: ./build
     container_name: coredns-api
     hostname: coredns-api
     ports:
