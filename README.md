@@ -1,4 +1,4 @@
-# REST API for standalone coredns
+# REST API for standalone coredns (base :https://github.com/YasuhiroOsajima/coredns-api)
 
 ## Install
 
